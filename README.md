@@ -36,4 +36,5 @@ jobs:
           jira_project: 'PRJ'
           jira_user: 'user@company.com'
           jira_token: '${{ secrets.JIRA_TOKEN }}'
+          jira_mark_released: 'true'
 ```

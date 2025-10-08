@@ -33,10 +33,11 @@ def get_project_id():
 
 def get_or_create_release(release_name):
     result = get("version", {"query": release_name})
+    mark_released = os.environ.get("INPUT_JIRA_MARK_RELEASED", "false").lower() == "true"
     if result["total"] == 0:
         return post(
             "version",
-            {"name": release_name, "projectId": get_project_id()},
+            {"name": release_name, "projectId": get_project_id(), "released": mark_released},
         ).json()
     elif result["total"] > 1:
         raise Exception("Found multiple releases with the same name.")
