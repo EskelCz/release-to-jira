@@ -35,16 +35,18 @@ def get_or_create_release(release_name):
     mark_released = os.environ.get("INPUT_JIRA_MARK_RELEASED", "false").lower() == "true"
     result = get("version", {"query": release_name})
     if result["total"] == 0:
-        return post(
+        version = post(
             "version",
             {"name": release_name, "projectId": get_project_id()},
         ).json()
-      # immediately mark it released if desired
-      if mark_released:
-        upd = put(f'version/{version["id"]}', {"released": True, "releaseDate": datetime.date.today().isoformat()})
-        upd.raise_for_status()
-        version = upd.json()
-      return version
+        
+        # immediately mark it released if desired
+        if mark_released:
+            upd = put(f'version/{version["id"]}', {"released": True})
+            upd.raise_for_status()
+            version = upd.json()
+            
+        return version
     elif result["total"] > 1:
         raise Exception("Found multiple releases with the same name.")
     else:
