@@ -17,6 +17,10 @@ inputs:
   jira_token:
     description: JIRA user token
     required: true
+  jira_mark_released:
+    description: Mark the fix version as released
+    required: false
+    default: 'false'
 runs:
   using: composite
   steps:
